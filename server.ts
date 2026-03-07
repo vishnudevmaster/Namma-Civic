@@ -1,16 +1,10 @@
 import express from 'express';
-import { createServer as createViteServer } from 'vite';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { createClient } from '@supabase/supabase-js';
 import { createClerkClient } from '@clerk/clerk-sdk-node';
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Initialize Supabase client
 const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
@@ -34,8 +28,6 @@ function generateComplaintId(id: number | string): string {
 }
 
 const app = express();
-const PORT = 3000;
-
 app.use(express.json({ limit: '50mb' }));
 
 // Custom auth middleware that verifies the Clerk session token
@@ -386,35 +378,5 @@ app.get('/api/analytics', async (_req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-// Vite middleware for development
-if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-  createViteServer({
-    server: { middlewareMode: true },
-    appType: 'spa',
-  }).then(vite => {
-    app.use(vite.middlewares);
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🏙️ NammaCivic server running on http://localhost:${PORT} (Dev)`);
-      console.log(`🔌 Database connected to Supabase`);
-    });
-  });
-} else {
-  // Production serving static files
-  app.use(express.static(path.join(__dirname, 'dist')));
-  app.get('*', (req, res) => {
-    if (req.path.startsWith('/api')) {
-      return res.status(404).json({ error: 'Not found' });
-    }
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-  });
-
-  if (!process.env.VERCEL) {
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🏙️ NammaCivic server running on http://localhost:${PORT} (Prod)`);
-      console.log(`🔌 Database connected to Supabase`);
-    });
-  }
-}
 
 export default app;
