@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
-import { Home, MapPin, PlusCircle, LayoutDashboard, Users, Menu, X, LogIn } from 'lucide-react';
+import { Home, MapPin, PlusCircle, LayoutDashboard, Users, LogIn, X } from 'lucide-react';
 import { SignedIn, SignedOut, SignInButton, UserButton, OrganizationSwitcher, useUser, useAuth } from '@clerk/clerk-react';
 import HomePage from './pages/HomePage';
 import ReportPage from './pages/ReportPage';
@@ -23,8 +23,8 @@ function NavLink({ to, children, onClick }: { to: string; children: React.ReactN
       to={to}
       onClick={onClick}
       className={`font-medium transition-colors ${isActive
-          ? 'text-emerald-600'
-          : 'text-stone-600 hover:text-stone-900'
+        ? 'text-emerald-600'
+        : 'text-stone-600 hover:text-stone-900'
         }`}
     >
       {children}
@@ -92,7 +92,6 @@ function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <Router>
@@ -117,7 +116,7 @@ export default function App() {
               <NavLink to="/admin">Admin</NavLink>
             </nav>
 
-            {/* Right side: Auth controls + Mobile menu button */}
+            {/* Right side: Auth controls */}
             <div className="flex items-center gap-2 sm:gap-3 ml-auto">
               <SignedOut>
                 <SignInButton mode="modal">
@@ -134,32 +133,8 @@ export default function App() {
                 </div>
                 <UserButton afterSignOutUrl="/" />
               </SignedIn>
-
-              {/* Mobile menu button — single instance */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-stone-600 hover:text-stone-900 transition-colors"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
             </div>
           </div>
-
-          {/* Mobile dropdown menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden border-t border-stone-100 bg-white px-4 py-4 space-y-3">
-              <SignedIn>
-                <div className="pb-3 border-b border-stone-100 sm:hidden">
-                  <OrganizationSwitcher hidePersonal={true} />
-                </div>
-              </SignedIn>
-              <NavLink to="/" onClick={() => setMobileMenuOpen(false)}>Home</NavLink>
-              <NavLink to="/report" onClick={() => setMobileMenuOpen(false)}>Report Issue</NavLink>
-              <NavLink to="/community" onClick={() => setMobileMenuOpen(false)}>Community</NavLink>
-              <NavLink to="/my-complaints" onClick={() => setMobileMenuOpen(false)}>My Complaints</NavLink>
-              <NavLink to="/admin" onClick={() => setMobileMenuOpen(false)}>Admin</NavLink>
-            </div>
-          )}
         </header>
 
         {/* Main Content */}
