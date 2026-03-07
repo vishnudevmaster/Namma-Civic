@@ -22,11 +22,10 @@ function NavLink({ to, children, onClick }: { to: string; children: React.ReactN
     <Link
       to={to}
       onClick={onClick}
-      className={`font-medium transition-colors ${
-        isActive
+      className={`font-medium transition-colors ${isActive
           ? 'text-emerald-600'
           : 'text-stone-600 hover:text-stone-900'
-      }`}
+        }`}
     >
       {children}
     </Link>
@@ -39,9 +38,8 @@ function MobileNavLink({ to, icon: Icon, label }: { to: string; icon: any; label
   return (
     <Link
       to={to}
-      className={`flex flex-col items-center transition-colors ${
-        isActive ? 'text-emerald-600' : 'text-stone-400 hover:text-emerald-600'
-      }`}
+      className={`flex flex-col items-center transition-colors ${isActive ? 'text-emerald-600' : 'text-stone-400 hover:text-emerald-600'
+        }`}
     >
       <Icon className="w-5 h-5" />
       <span className="text-[10px] mt-1 font-medium">{label}</span>
@@ -53,7 +51,7 @@ function MobileNavLink({ to, icon: Icon, label }: { to: string; icon: any; label
 function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
   const { isLoaded, isSignedIn, user } = useUser();
   const { orgRole } = useAuth();
-  
+
   if (!isLoaded) {
     return (
       <div className="flex justify-center items-center h-screen bg-stone-50">
@@ -102,36 +100,13 @@ export default function App() {
         {/* Header */}
         <header className="bg-white/80 backdrop-blur-lg border-b border-stone-200/60 sticky top-0 z-30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2.5 text-emerald-600 font-bold text-xl tracking-tight">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2.5 text-emerald-600 font-bold text-xl tracking-tight shrink-0">
               <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-sm">
                 <MapPin className="w-5 h-5 text-white" />
               </div>
               <span>NammaCivic</span>
             </Link>
-
-            <div className="flex items-center gap-4 ml-auto md:ml-0 md:flex-none">
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl font-medium transition-all text-sm">
-                    <LogIn className="w-4 h-4" /> Sign In
-                  </button>
-                </SignInButton>
-              </SignedOut>
-              <SignedIn>
-                <div className="flex items-center gap-3">
-                  <OrganizationSwitcher hidePersonal={true} />
-                  <UserButton afterSignOutUrl="/" />
-                </div>
-              </SignedIn>
-
-              {/* Mobile menu button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-stone-600 hover:text-stone-900 transition-colors"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8 ml-8">
@@ -142,18 +117,42 @@ export default function App() {
               <NavLink to="/admin">Admin</NavLink>
             </nav>
 
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-stone-600 hover:text-stone-900 transition-colors"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            {/* Right side: Auth controls + Mobile menu button */}
+            <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+              <SignedOut>
+                <SignInButton mode="modal">
+                  {/* Full button on desktop, compact on mobile */}
+                  <button className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-3 sm:px-4 py-2 rounded-xl font-medium transition-all text-sm">
+                    <LogIn className="w-4 h-4" />
+                    <span className="hidden sm:inline">Sign In</span>
+                  </button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <div className="hidden sm:block">
+                  <OrganizationSwitcher hidePersonal={true} />
+                </div>
+                <UserButton afterSignOutUrl="/" />
+              </SignedIn>
+
+              {/* Mobile menu button — single instance */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 text-stone-600 hover:text-stone-900 transition-colors"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
 
           {/* Mobile dropdown menu */}
           {mobileMenuOpen && (
             <div className="md:hidden border-t border-stone-100 bg-white px-4 py-4 space-y-3">
+              <SignedIn>
+                <div className="pb-3 border-b border-stone-100 sm:hidden">
+                  <OrganizationSwitcher hidePersonal={true} />
+                </div>
+              </SignedIn>
               <NavLink to="/" onClick={() => setMobileMenuOpen(false)}>Home</NavLink>
               <NavLink to="/report" onClick={() => setMobileMenuOpen(false)}>Report Issue</NavLink>
               <NavLink to="/community" onClick={() => setMobileMenuOpen(false)}>Community</NavLink>
@@ -170,13 +169,13 @@ export default function App() {
             <Route path="/report" element={<ReportPage />} />
             <Route path="/community" element={<CommunityFeedPage />} />
             <Route path="/my-complaints" element={<MyComplaintsPage />} />
-            <Route 
-              path="/admin" 
+            <Route
+              path="/admin"
               element={
                 <ProtectedAdminRoute>
                   <AdminPage />
                 </ProtectedAdminRoute>
-              } 
+              }
             />
             <Route path="/complaint/:id" element={<ComplaintDetailPage />} />
           </Routes>
