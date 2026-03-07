@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NammaCivic — Report civic issues like potholes, garbage, and streetlight outages in Bengaluru. Track resolution in real-time." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <title>NammaCivic — Bengaluru Civic Issue Portal</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Load Google Maps Places API dynamically
+      (function() {
+        var key = '%VITE_GOOGLE_MAPS_KEY%';
+        if (key && key !== '' && !key.startsWith('%')) {
+          var script = document.createElement('script');
+          script.src = 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&loading=async';
+          script.async = true;
+          script.defer = true;
+          document.head.appendChild(script);
+        }
+      })();
+    </script>
+  </body>
+</html>
+

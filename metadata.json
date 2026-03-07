@@ -1,0 +1,7 @@
+{
+  "name": "Namma Bengaluru Civic",
+  "description": "A unified civic complaint platform for Bengaluru citizens to report and track issues like potholes, garbage, and streetlights, featuring AI assistance.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
