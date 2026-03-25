@@ -80,7 +80,7 @@ export default function HomePage() {
             transition={{ delay: 0.2 }}
             className="text-lg md:text-xl text-stone-600 max-w-2xl mx-auto mt-4"
           >
-            Namma Bengaluru Civic Portal helps you report potholes, garbage, water issues, and more.
+            Smart Civic System helps you report potholes, garbage, water issues, and more.
             Track resolution in real-time. Make your city better.
           </motion.p>
           <motion.div
